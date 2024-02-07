@@ -1,0 +1,490 @@
+DSA PRACTICAL CODE AND ALGORITHMS :
+
+
+
+Singly linked list create and insert at the middle 
+
+
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+ int data;
+ struct Node* next;
+};
+struct Node* createNode(int data) {
+ struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+ if (newNode == NULL) {
+ printf("Memory allocation failed!\n");
+ exit(1);
+ }
+ newNode->data = data;
+ newNode->next = NULL;
+ return newNode;
+}
+void append(struct Node** headRef, int data) {
+ struct Node* newNode = createNode(data);
+ if (*headRef == NULL) {
+ *headRef = newNode;
+ return;
+ }
+ struct Node* current = *headRef;
+ while (current->next != NULL) {
+ current = current->next;
+ }
+ current->next = newNode;
+}
+void insertAtMiddle(struct Node** headRef, int data) {
+ if (*headRef == NULL) {
+ *headRef = createNode(data);
+ return;
+ }
+ struct Node* slow = *headRef;
+ struct Node* fast = *headRef;
+ struct Node* prev = NULL;
+ while (fast != NULL && fast->next != NULL) {
+ prev = slow;
+ slow = slow->next;
+ fast = fast->next->next;
+ }
+ struct Node* newNode = createNode(data);
+ prev->next = newNode;
+ newNode->next = slow;
+}
+void printList(struct Node* head) {
+ struct Node* current = head;
+ while (current != NULL) {
+ printf("%d -> ", current->data);
+ current = current->next;
+ }
+ printf("NULL\n");
+}
+// Main function
+int main() {
+ struct Node* head = NULL;
+ append(&head, 1);
+ append(&head, 2);
+ append(&head, 4);
+ append(&head, 5);
+ printf("Original linked list:\n");
+ printList(head);
+ insertAtMiddle(&head, 3);
+ printf("Linked list after insertion at the middle:\n");
+ printList(head);
+ return 0;
+}
+
+algorithms : 
+
+singly linked list create and insert at the middle of the list 
+
+1. Define Node struct with data and next pointer for representing individual elements.
+2. Implement createNode function to allocate memory and initialize a new node with given data.
+3. Develop append function to add a node at the end of the linked list.
+4. Write insertAtMiddle function to insert a node at the middle of the list.
+5. Define printList function to traverse the list and print its elements.
+6. In the main function, initialize the head pointer to NULL to signify an empty list.
+7. Append elements to the list to create an initial linked list.
+8. Print the original list to verify the elements' arrangement.
+9. Insert a node at the middle of the list using the insertAtMiddle function.
+10. Print the updated list to verify the insertion operation.
+11. Free allocated memory for the nodes to prevent memory leaks.
+
+
+
+
+
+
+
+
+
+
+Singly linked list create and delete from any position 
+
+
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+ int data;
+ struct Node* next;
+};
+struct Node* createNode(int data) {
+ struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+ if (newNode == NULL) {
+ printf("Memory allocation failed!\n");
+ exit(1);
+ }
+ newNode->data = data;
+ newNode->next = NULL;
+ return newNode;
+}
+void append(struct Node** headRef, int data) {
+ struct Node* newNode = createNode(data);
+ if (*headRef == NULL) {
+ *headRef = newNode;
+ return;
+ }
+ struct Node* current = *headRef;
+ while (current->next != NULL) {
+ current = current->next;
+ }
+ current->next = newNode;
+}
+void deleteNode(struct Node** headRef, int position) {
+ if (*headRef == NULL) {
+ printf("List is empty!\n");
+ return;
+ }
+ struct Node* temp = *headRef;
+ if (position == 0) {
+ *headRef = temp->next;
+ free(temp);
+ return;
+ }
+ for (int i = 0; temp != NULL && i < position - 1; i++) {
+ temp = temp->next;
+ }
+ if (temp == NULL || temp->next == NULL) {
+ printf("Position is out of range!\n");
+ return;
+ }
+ struct Node* nextNode = temp->next->next;
+ free(temp->next);
+ temp->next = nextNode;
+}
+void printList(struct Node* head) {
+ struct Node* current = head;
+ while (current != NULL) {
+ printf("%d -> ", current->data);
+ current = current->next;
+ }
+ printf("NULL\n");
+}
+int main() {
+ struct Node* head = NULL;
+ append(&head, 1);
+ append(&head, 2);
+ append(&head, 3);
+ append(&head, 4);
+ append(&head, 5);
+ printf("Original linked list:\n");
+ printList(head);
+ deleteNode(&head, 2);
+ printf("Linked list after deleting node at position 2:\n");
+ printList(head);
+ return 0;
+}
+
+
+algorithms:
+
+singly linked list create and delete from the any position of the list 
+
+1. **Define Node structure:** Create a struct named `Node` with `data` and `next` pointer.
+2. **Create `createNode` function:** Allocate memory for a new node, set `data` and `next`, return the node pointer.
+3. **Create `append` function:** Accept head pointer address and data. If list is empty, set head to new node; else, traverse to last node and append.
+4. **Create `deleteNode` function:**
+    - Accept head pointer address and position.
+    - Handle empty list and delete from start.
+    - Traverse to node before position, update pointers, free memory.
+    - Handle special cases: empty list, out-of-range position.
+5. **Create `printList` function:** Accept head pointer, traverse list, and print each node's data.
+6. **Main function:**
+    - Initialize head to NULL.
+    - Append nodes to create list.
+    - Print original list.
+    - Delete a node from a given position.
+    - Print updated list.
+7. **Handle special cases in `deleteNode` function:** Check if the list is empty or if the position to delete is out of range.
+8. **Perform boundary checks:** Ensure that the position to delete is within the bounds of the list to avoid errors.
+9. **Ensure memory deallocation:** Free the memory allocated for the deleted node to prevent memory leaks.
+10. **Error handling:** Print error messages or handle errors gracefully if memory allocation fails or if the position to delete is invalid.
+11. **Edge case handling:** Consider scenarios like deleting the last node or deleting the only node in the list.
+
+
+
+
+
+
+
+
+
+Quick sort 
+
+
+#include <stdio.h>
+void swap(int* a, int* b) {
+ int temp = *a;
+ *a = *b;
+ *b = temp;
+}
+int partition(int arr[], int low, int high) {
+ int pivot = arr[high];
+ int i = (low - 1);
+ for (int j = low; j <= high - 1; j++) {
+ if (arr[j] < pivot) {
+ i++;
+ swap(&arr[i], &arr[j]);
+ }
+ }
+ swap(&arr[i + 1], &arr[high]);
+ return (i + 1);
+}
+void quickSort(int arr[], int low, int high) {
+ if (low < high) {
+ int pivot = partition(arr, low, high);
+ quickSort(arr, low, pivot - 1);
+ quickSort(arr, pivot + 1, high);
+ }
+}
+void printArray(int arr[], int size) {
+ for (int i = 0; i < size; i++)
+ printf("%d ", arr[i]);
+ printf("\n");
+}
+int main() {
+ int arr[] = {10, 7, 8, 9, 1, 5};
+ int n = sizeof(arr) / sizeof(arr[0]);
+ printf("Original array: \n");
+ printArray(arr, n);
+ quickSort(arr, 0, n - 1);
+ printf("Sorted array: \n");
+ printArray(arr, n);
+ return 0;
+}
+
+
+algorithms: 
+
+quick sort function algorithm 
+
+1. **Define a function `swap`**:
+    - Accepts two integer pointers as arguments.
+    - Swaps the values of the integers pointed to by the pointers.
+2. **Define a function `partition`**:
+    - Accepts an array, and integer indices `low` and `high`.
+    - Chooses the last element `arr[high]` as the pivot.
+    - Partitions the array such that elements smaller than the pivot are on the left and greater on the right.
+    - Returns the index of the pivot element.
+3. **Define a function `quickSort`**:
+    - Accepts an array, and integer indices `low` and `high`.
+    - If `low` is less than `high`, recursively partitions the array using `partition` and sorts each partition.
+4. **Define a function `printArray`**:
+    - Accepts an array and its size.
+    - Prints each element of the array.
+5. **Main function**:
+    - Initialize an array with elements.
+    - Print the original array.
+    - Call `quickSort` to sort the array.
+    - Print the sorted array.
+
+
+
+
+
+
+
+
+
+    Merge sort 
+
+#include <stdio.h>
+#include <stdlib.h>
+void merge(int arr[], int left, int mid, int right) {
+ int i, j, k;
+ int n1 = mid - left + 1;
+ int n2 = right - mid;
+ int L[n1], R[n2];
+
+ for (i = 0; i < n1; i++)
+    L[i] = arr[left + i];
+ for (j = 0; j < n2; j++)
+    R[j] = arr[mid + 1 + j];
+ i = 0;
+ j = 0;
+ k = left;
+ while (i < n1 && j < n2) {
+    if (L[i] <= R[j]) {
+    arr[k] = L[i];
+     i++;
+ } else {
+    arr[k] = R[j];
+    j++;
+ }
+ k++;
+ }
+ while (i < n1) {
+ arr[k] = L[i];
+ i++;
+ k++;
+ }
+ while (j < n2) {
+ arr[k] = R[j];
+ j++;
+ k++;
+ }
+}
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+ }
+}
+void printArray(int arr[], int size) {
+ int i;
+ for (i = 0; i < size; i++)
+    printf("%d ", arr[i]);
+ printf("\n");
+}
+int main() {
+ int arr[] = {12, 11, 13, 5, 6, 7};
+ int arr_size = sizeof(arr) / sizeof(arr[0]);
+
+ printf("Original array: \n");
+ printArray(arr, arr_size);
+
+ mergeSort(arr, 0, arr_size - 1);
+ 
+ printf("Sorted array: \n");
+ printArray(arr, arr_size);
+ return 0;
+}
+
+
+algorithms:
+
+merge sort function algorithm 
+
+1. **Define a function `merge`**:
+    - Accepts an array `arr[]`, and integer indices `left`, `mid`, and `right`.
+    - Creates two temporary arrays `L[]` and `R[]`.
+    - Copies data from `arr[]` to `L[]` and `R[]`.
+    - Merges the two sorted subarrays back into `arr[]`.
+2. **Define a function `mergeSort`**:
+    - Accepts an array `arr[]`, and integer indices `left` and `right`.
+    - If `left` is less than `right`, finds the middle point.
+    - Recursively sorts the first half and the second half of the array.
+    - Merges the two sorted halves using the `merge` function.
+3. **Define a function `printArray`**:
+    - Accepts an array `arr[]` and its size.
+    - Prints each element of the array.
+4. **Main function**:
+    - Initializes an array with elements.
+    - Prints the original array.
+    - Calls `mergeSort` to sort the array.
+    - Prints the sorted array.
+
+
+
+
+
+
+
+
+
+    Bubble sort and selection sort (menu driven)
+
+
+#include <stdio.h>
+void bubbleSort(int arr[], int n) {
+ int i, j;
+ for (i = 0; i < n - 1; i++) {
+ for (j = 0; j < n - i - 1; j++) {
+ if (arr[j] > arr[j + 1]) {
+ // Swap arr[j] and arr[j+1]
+ int temp = arr[j];
+ arr[j] = arr[j + 1];
+ arr[j + 1] = temp;
+ }
+ }
+ }
+}
+void selectionSort(int arr[], int n) {
+ int i, j, min_idx;
+ for (i = 0; i < n - 1; i++) {
+ min_idx = i;
+ for (j = i + 1; j < n; j++) {
+ if (arr[j] < arr[min_idx]) {
+ min_idx = j;
+ }
+ }
+ int temp = arr[min_idx];
+ arr[min_idx] = arr[i];
+ arr[i] = temp;
+ }
+}
+void printArray(int arr[], int n) {
+ for (int i = 0; i < n; i++) {
+ printf("%d ", arr[i]);
+ }
+ printf("\n");
+}
+int main() {
+ int choice, n, i;
+ printf("Enter the number of elements: ");
+ scanf("%d", &n);
+ int arr[n];
+ printf("Enter %d elements:\n", n);
+ for (i = 0; i < n; i++) {
+ scanf("%d", &arr[i]);
+ }
+ do {
+ printf("\nMenu:\n");
+ printf("1. Bubble Sort\n");
+ printf("2. Selection Sort\n");
+ printf("3. Exit\n");
+ printf("Enter your choice: ");
+ scanf("%d", &choice);
+ switch (choice) {
+
+ case 1:
+ printf("\nArray before Bubble Sort: ");
+ printArray(arr, n);
+ bubbleSort(arr, n);
+ printf("Array after Bubble Sort: ");
+ printArray(arr, n);
+ break;
+
+ case 2:
+ printf("\nArray before Selection Sort: ");
+ printArray(arr, n);
+ selectionSort(arr, n);
+ printf("Array after Selection Sort: ");
+ printArray(arr, n);
+ break;
+ 
+ case 3:
+ printf("Exiting the program.\n");
+ break;
+ default:
+ printf("Invalid choice! Please enter a valid choice.\n");
+ }
+ } while (choice != 3);
+ return 0;
+
+
+
+algorithms: 
+
+bubble sort function with selection sort (menu driven) algorithm 
+
+1. **Input the number of elements `n` and the array elements**.
+2. **Display a menu**:
+    - Option 1: Bubble Sort
+    - Option 2: Selection Sort
+    - Option 3: Exit
+
+1. **Repeat until the user chooses to exit**:
+    - Read the user's choice from the menu.
+    - Perform the corresponding sorting algorithm based on the choice:
+        - If choice is 1, perform Bubble Sort.
+        - If choice is 2, perform Selection Sort.
+        - If choice is 3, exit the program.
+        - If the choice is invalid, display an error message.
+2. **Bubble Sort algorithm**:
+    - Compare adjacent elements and swap if necessary until the array is sorted.
+3. **Selection Sort algorithm**:
+    - Find the minimum element in the unsorted part of the array and swap it with the first element.
+    - Repeat the process for the remaining elements until the array is sorted.
+4. **Display the sorted array** after each sorting operation.
