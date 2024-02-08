@@ -56,7 +56,99 @@ void printList(struct Node* head) {
  printf("%d -> ", current->data);
  current = current->next;
  }
- printf("NULL\n");
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a node structure
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to insert a new node at the beginning of the linked list
+void insertAtBeginning(struct Node** head_ref, int new_data) {
+    // Allocate memory for new node
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    // Assign data to the new node
+    new_node->data = new_data;
+    // Set the next of the new node to the current head
+    new_node->next = *head_ref;
+    // Move the head to point to the new node
+    *head_ref = new_node;
+}
+
+// Function to insert a new node after a given node
+void insertInMiddle(struct Node* prev_node, int new_data) {
+    // Check if the given prev_node is NULL
+    if (prev_node == NULL) {
+        printf("The given previous node cannot be NULL");
+        return;
+    }
+    // Allocate memory for new node
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    // Assign data to the new node
+    new_node->data = new_data;
+    // Set the next of the new node to the next of prev_node
+    new_node->next = prev_node->next;
+    // Set the next of prev_node to the new node
+    prev_node->next = new_node;
+}
+
+// Function to print the linked list
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+}
+
+int main() {
+    struct Node* head = NULL;
+    int n, data;
+
+    // Asking user to input the number of elements
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+
+    // Asking user to input the elements and adding them to the beginning of the linked list
+    printf("Enter %d integers:\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &data);
+        insertAtBeginning(&head, data);
+    }
+
+    // Printing the linked list after insertion at the beginning
+    printf("Linked list after insertion at the beginning: ");
+    printList(head);
+    printf("\n");
+
+    // Asking user to input data and position to insert in the middle
+    int position, newData;
+    printf("Enter the position to insert in the middle: ");
+    scanf("%d", &position);
+    printf("Enter the data to insert in the middle: ");
+    scanf("%d", &newData);
+
+    // Traversing to the middle position
+    struct Node* temp = head;
+    for (int i = 1; i < position; i++) {
+        temp = temp->next;
+        if (temp == NULL) {
+            printf("Invalid position.\n");
+            return 0;
+        }
+    }
+
+    // Inserting in the middle
+    insertInMiddle(temp, newData);
+
+    // Printing the linked list after insertion in the middle
+    printf("Linked list after insertion in the middle: ");
+    printList(head);
+    printf("\n");
+
+    return 0;
+} printf("NULL\n");
 }
 // Main function
 int main() {
@@ -84,107 +176,7 @@ struct Node {
 };
 
 // Function to insert a new node at the beginning of the linked list
-void insertAtBeginning(struct Node** head_ref, int new_data) {
-    // Allocate memory for new node
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-    // Assign data to the new node
-    new_node->data = new_data;
-    // Set the next of the new node to the current head
-    new_node->next = *head_ref;
-    // Move the head to point to the new node
-    *head_ref = new_node;
-}
 
-// Function to insert a new node after a given node
-void insertAfter(struct Node* prev_node, int new_data) {
-    // Check if the given prev_node is NULL
-    if (prev_node == NULL) {
-        printf("The given previous node cannot be NULL");
-        return;
-    }
-    // Allocate memory for new node
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-    // Assign data to the new node
-    new_node->data = new_data;
-    // Set the next of the new node to the next of prev_node
-    new_node->next = prev_node->next;
-    // Set the next of prev_node to the new node
-    prev_node->next = new_node;
-}
-
-// Function to delete a node at a given position
-void deleteNode(struct Node** head_ref, int position) {
-    // If linked list is empty
-    if (*head_ref == NULL)
-        return;
-
-    // Store head node
-    struct Node* temp = *head_ref;
-
-    // If head needs to be removed
-    if (position == 0) {
-        *head_ref = temp->next; // Change head
-        free(temp); // Free old head
-        return;
-    }
-
-    // Find previous node of the node to be deleted
-    for (int i = 0; temp != NULL && i < position - 1; i++)
-        temp = temp->next;
-
-    // If position is more than number of nodes
-    if (temp == NULL || temp->next == NULL)
-        return;
-
-    // Node temp->next is the node to be deleted
-    // Store pointer to the next of node to be deleted
-    struct Node* next = temp->next->next;
-
-    // Unlink the node from linked list
-    free(temp->next); // Free memory
-
-    // Unlink the deleted node from list
-    temp->next = next;
-}
-
-// Function to print the linked list
-void printList(struct Node* node) {
-    while (node != NULL) {
-        printf("%d ", node->data);
-        node = node->next;
-    }
-}
-
-int main() {
-    struct Node* head = NULL;
-
-    // Insert nodes at the beginning
-    insertAtBeginning(&head, 5);
-    insertAtBeginning(&head, 4);
-    insertAtBeginning(&head, 3);
-    insertAtBeginning(&head, 2);
-    insertAtBeginning(&head, 1);
-
-    printf("Linked list after insertion: ");
-    printList(head);
-    printf("\n");
-
-    // Insert a node after the second node
-    insertAfter(head->next, 10);
-
-    printf("Linked list after insertion after the second node: ");
-    printList(head);
-    printf("\n");
-
-    // Delete the node at position 2
-    deleteNode(&head, 2);
-
-    printf("Linked list after deletion of node at position 2: ");
-    printList(head);
-    printf("\n");
-
-    return 0;
-}
 singly linked list create and insert at the middle of the list 
 
 1. Define Node struct with data and next pointer for representing individual elements.
